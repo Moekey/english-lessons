@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idiom Master: Interactive Workbook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .serif {
+            font-family: 'Merriweather', serif;
+        }
+        .card-flip {
+            perspective: 1000px;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+        .card-flip.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .card-front {
+            background-color: white;
+            color: #1f2937;
+            border: 2px solid #e5e7eb;
+        }
+        .card-back {
+            background-color: #3b82f6;
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .droppable {
+            transition: all 0.2s ease;
+        }
+        .droppable.drag-over {
+            background-color: #dbeafe;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+        /* Custom Emoji Art Classes */
+        .emoji-scene {
+            font-size: 4rem;
+            line-height: 1;
+            position: relative;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #eef2ff;
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+        .heart-sink {
+            animation: sink 2s infinite ease-in-out;
+        }
+        @keyframes sink {
+            0% { transform: translateY(-20px); opacity: 1; }
+            50% { transform: translateY(20px); opacity: 0.5; }
+            100% { transform: translateY(-20px); opacity: 1; }
+        }
+        .angry-bed {
+            position: relative;
+        }
+        .angry-bed::after {
+            content: "😡";
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            font-size: 2rem;
+            animation: shake 0.5s infinite;
+        }
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(10deg); }
+            75% { transform: rotate(-10deg); }
+            100% { transform: rotate(0deg); }
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">I</div>
+                <h1 class="text-xl font-bold text-gray-800">Idiom Master <span class="text-blue-600">Unit 1</span></h1>
+            </div>
+            <div class="flex space-x-1 bg-gray-100 p-1 rounded-lg text-sm font-medium">
+                <button onclick="switchTab('learn')" id="tab-learn" class="px-4 py-2 rounded-md bg-white shadow text-blue-600 transition-all">Study Guide</button>
+                <button onclick="switchTab('fill')" id="tab-fill" class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700 transition-all">Fill Blanks</button>
+                <button onclick="switchTab('match')" id="tab-match" class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700 transition-all">Matching</button>
+                <button onclick="switchTab('visual')" id="tab-visual" class="px-4 py-2 rounded-md text-gray-500 hover:text-gray-700 transition-all">Visuals</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-5xl mx-auto px-4 py-8 w-full">
+
+        <!-- TAB 1: STUDY GUIDE -->
+        <div id="view-learn" class="space-y-8 animate-fade-in">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r shadow-sm">
+                <h2 class="text-lg font-bold text-blue-800">Introduction</h2>
+                <p class="text-blue-700 mt-1">Idioms are fixed phrases where the meaning isn't always obvious from the individual words. Click the cards below to reveal their meanings.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Cards generated by JS -->
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg p-6 mt-8">
+                <h3 class="text-xl font-bold mb-4 flex items-center"><span class="text-2xl mr-2">💬</span> Contextual Dialogue</h3>
+                <div class="space-y-4 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">A</div>
+                        <div class="bg-white p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-gray-700 text-sm">
+                            I asked Sue about her essay and she just ignored me.
+                        </div>
+                    </div>
+                    <div class="flex gap-3 flex-row-reverse">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">B</div>
+                        <div class="bg-blue-600 text-white p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-sm text-sm">
+                            Yes, I think it's a bit of a <strong class="underline decoration-wavy decoration-white/50 cursor-help" title="Something that makes you upset/angry when mentioned">sore point</strong> because she got a very low mark for it.
+                        </div>
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center text-purple-600 font-bold">A</div>
+                        <div class="bg-white p-3 rounded-tr-xl rounded-br-xl rounded-bl-xl shadow-sm text-gray-700 text-sm">
+                            Oh dear. I <strong class="text-purple-600 font-semibold">put my foot in it</strong>, then.
+                        </div>
+                    </div>
+                    <div class="flex gap-3 flex-row-reverse">
+                        <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">B</div>
+                        <div class="bg-blue-600 text-white p-3 rounded-tl-xl rounded-bl-xl rounded-br-xl shadow-sm text-sm">
+                            No, it <strong class="font-semibold">serves her right</strong>. She <strong class="font-semibold">didn't do a stroke of work</strong>, so don't <strong class="font-semibold">take it personally</strong>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: FILL IN THE BLANKS -->
+        <div id="view-fill" class="hidden space-y-6">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-800">Complete the Sentences</h2>
+                <div class="text-sm font-semibold bg-blue-100 text-blue-800 px-3 py-1 rounded-full">Score: <span id="fill-score">0</span>/10</div>
+            </div>
+
+            <!-- Word Bank -->
+            <div class="bg-white p-4 rounded-xl shadow-md border border-gray-200 sticky top-20 z-40">
+                <p class="text-xs font-bold text-gray-400 uppercase mb-2">Word Bank (Click to use)</p>
+                <div id="word-bank" class="flex flex-wrap gap-2">
+                    <!-- Words injected by JS -->
+                </div>
+            </div>
+
+            <!-- Questions -->
+            <div id="fill-questions" class="space-y-3">
+                <!-- Questions injected by JS -->
+            </div>
+            
+            <button onclick="checkFillAnswers()" class="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl shadow-lg transition-colors text-lg">Check Answers</button>
+        </div>
+
+        <!-- TAB 3: MATCHING & READING -->
+        <div id="view-match" class="hidden space-y-8">
+            
+            <!-- Reading Text -->
+            <div class="bg-white p-6 rounded-xl shadow-md border-l-4 border-indigo-500">
+                <h3 class="text-lg font-bold text-gray-800 mb-2">📖 Read the text about Kevin</h3>
+                <p class="serif text-gray-600 leading-relaxed text-sm">
+                    On the first morning we met our instructor, Kevin, and he made it clear we were going to <span class="bg-yellow-100 px-1 rounded font-semibold text-gray-800">hit the ground running</span>. We had to build a raft and then sail it down a river; he said it would <span class="bg-yellow-100 px-1 rounded font-semibold text-gray-800">sort out the sheep from the goats</span>. That made me feel very uneasy, but I <span class="bg-yellow-100 px-1 rounded font-semibold text-gray-800">put a brave face on it</span>. The next day was even worse... but I was determined not to <span class="bg-yellow-100 px-1 rounded font-semibold text-gray-800">throw in the towel</span>. By the third day I realized we were <span class="bg-yellow-100 px-1 rounded font-semibold text-gray-800">all in the same boat</span>. I also realized Kevin's <span class="bg-yellow-100 px-1 rounded font-semibold text-gray-800">bark was worse than his bite</span>.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div>
+                    <h3 class="font-bold text-gray-700 mb-4">Idioms</h3>
+                    <div id="match-sources" class="space-y-3">
+                        <!-- Draggable sources -->
+                    </div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-gray-700 mb-4">Definitions</h3>
+                    <div id="match-targets" class="space-y-3">
+                        <!-- Drop targets -->
+                    </div>
+                </div>
+            </div>
+            <div id="match-feedback" class="hidden p-4 rounded-lg text-center font-bold"></div>
+        </div>
+
+        <!-- TAB 4: VISUAL CHALLENGE -->
+        <div id="view-visual" class="hidden space-y-8">
+            <h2 class="text-2xl font-bold text-center text-gray-800">Guess the Idiom</h2>
+            <p class="text-center text-gray-500">Look at the visual representation and select the correct idiom.</p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Visual Cards -->
+                <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center space-y-4">
+                    <div class="emoji-scene w-full bg-red-50">
+                        <div class="angry-bed text-6xl">🛌</div>
+                    </div>
+                    <select class="w-full p-2 border rounded bg-gray-50" onchange="checkVisual(this, 'wrong_side')">
+                        <option value="">Select Idiom...</option>
+                        <option value="woods">Not out of the woods</option>
+                        <option value="wrong_side">Got out of bed on wrong side</option>
+                        <option value="seat">Take a back seat</option>
+                    </select>
+                    <div class="feedback text-sm font-bold"></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center space-y-4">
+                    <div class="emoji-scene w-full bg-blue-50">
+                        <div class="heart-sink text-6xl">💔</div>
+                    </div>
+                    <select class="w-full p-2 border rounded bg-gray-50" onchange="checkVisual(this, 'heart_sank')">
+                        <option value="">Select Idiom...</option>
+                        <option value="heart_sank">My heart sank</option>
+                        <option value="brave_face">Put a brave face on it</option>
+                        <option value="sore">Sore point</option>
+                    </select>
+                    <div class="feedback text-sm font-bold"></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center space-y-4">
+                    <div class="emoji-scene w-full bg-green-50">
+                        <div class="text-4xl">🌲🌲🏃‍♂️🌲🌲</div>
+                    </div>
+                    <select class="w-full p-2 border rounded bg-gray-50" onchange="checkVisual(this, 'woods')">
+                        <option value="">Select Idiom...</option>
+                        <option value="woods">Not out of the woods</option>
+                        <option value="bark">Bark worse than bite</option>
+                        <option value="towel">Throw in the towel</option>
+                    </select>
+                    <div class="feedback text-sm font-bold"></div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-lg flex flex-col items-center space-y-4">
+                    <div class="emoji-scene w-full bg-gray-50">
+                        <div class="text-5xl">🚗🔙💺</div>
+                    </div>
+                    <select class="w-full p-2 border rounded bg-gray-50" onchange="checkVisual(this, 'back_seat')">
+                        <option value="">Select Idiom...</option>
+                        <option value="boat">All in the same boat</option>
+                        <option value="back_seat">Take a back seat</option>
+                        <option value="feet">Land on your feet</option>
+                    </select>
+                    <div class="feedback text-sm font-bold"></div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- DATA ---
+        const studyData = [
+            { idiom: "not out of the woods", meaning: "not yet free from difficulties or problems", type: "General" },
+            { idiom: "take a back seat", meaning: "deliberately become less actively involved", type: "General" },
+            { idiom: "my heart sank", meaning: "suddenly felt sad or worried", type: "Emotion" },
+            { idiom: "having said that", meaning: "used to say sth is true despite what you just said", type: "Connector" },
+            { idiom: "next thing I knew", meaning: "happened very quickly and unexpectedly", type: "Narrative" },
+            { idiom: "thought as much", meaning: "not surprised that something is true", type: "Reaction" },
+            { idiom: "more than likely", meaning: "very likely", type: "Probability" },
+            { idiom: "hard pressed", meaning: "find it very difficult to do something", type: "Difficulty" },
+            { idiom: "sore point", meaning: "something that makes you upset when mentioned", type: "Conflict" },
+            { idiom: "put my foot in it", meaning: "accidentally say something embarrassing", type: "Mistake" }
+        ];
+
+        const fillQuestions = [
+            { pre: "There's been a slight improvement, but he's not out of the", answer: "woods", post: "yet." },
+            { pre: "Is Karen still upset? Yes, I'm afraid it's a", answer: "sore", post: "point." },
+            { pre: "My brother hasn't done a", answer: "stroke", post: "of work all day." },
+            { pre: "The seat collapsed and the next", answer: "thing", post: "I knew, I was on the floor." },
+            { pre: "I didn't mean to upset her. I'm afraid I put my", answer: "foot", post: "in it." },
+            { pre: "New York is exciting.", answer: "Having", post: "said that, it is expensive." },
+            { pre: "I was", answer: "more", post: "than happy to help." },
+            { pre: "We'll be", answer: "hard", post: "pressed to finish by 5pm." },
+            { pre: "Sam lost. I thought as", answer: "much", post: "." },
+            { pre: "Don't take it", answer: "personally", post: ", she's just grumpy." }
+        ];
+
+        const wordBank = ["woods", "sore", "stroke", "thing", "foot", "Having", "more", "hard", "much", "personally"];
+
+        const matchingData = [
+            { id: 1, idiom: "Hit the ground running", def: "Start doing something and proceed quickly" },
+            { id: 2, idiom: "Sort sheep from goats", def: "Distinguish able people from less able" },
+            { id: 3, idiom: "Put a brave face on it", def: "Pretend you feel confident when you don't" },
+            { id: 4, idiom: "Throw in the towel", def: "Admit defeat and stop trying" },
+            { id: 5, idiom: "All in the same boat", def: "Be in the same difficult situation" },
+            { id: 6, idiom: "Bark worse than bite", def: "Not as aggressive as they sound" }
+        ];
+
+        // --- STATE ---
+        let selectedWord = null;
+        let matchSelection = null;
+
+        // --- INIT ---
+        document.addEventListener('DOMContentLoaded', () => {
+            renderStudyCards();
+            renderFillQuiz();
+            renderMatchingGame();
+        });
+
+        function switchTab(tabId) {
+            // Hide all views
+            ['learn', 'fill', 'match', 'visual'].forEach(id => {
+                document.getElementById(`view-${id}`).classList.add('hidden');
+                document.getElementById(`tab-${id}`).classList.remove('bg-white', 'shadow', 'text-blue-600');
+                document.getElementById(`tab-${id}`).classList.add('text-gray-500');
+            });
+
+            // Show selected
+            document.getElementById(`view-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('bg-white', 'shadow', 'text-blue-600');
+            document.getElementById(`tab-${tabId}`).classList.remove('text-gray-500');
+        }
+
+        // --- STUDY GUIDE LOGIC ---
+        function renderStudyCards() {
+            const container = document.querySelector('#view-learn .grid');
+            container.innerHTML = studyData.map(item => `
+                <div class="h-48 card-flip group" onclick="this.classList.toggle('flipped')">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">${item.type}</span>
+                            <h3 class="text-xl font-bold text-center">${item.idiom}</h3>
+                            <p class="text-gray-400 text-xs mt-4">(Click to flip)</p>
+                        </div>
+                        <div class="card-back">
+                            <p class="text-lg font-medium px-4">${item.meaning}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // --- FILL BLANKS LOGIC ---
+        function renderFillQuiz() {
+            // Render Word Bank
+            const bankContainer = document.getElementById('word-bank');
+            bankContainer.innerHTML = wordBank.map(word => `
+                <button onclick="selectWord('${word}', this)" class="word-btn px-3 py-1 bg-gray-100 hover:bg-blue-100 border border-gray-300 rounded-md text-sm font-medium transition-colors">${word}</button>
+            `).join('');
+
+            // Render Questions
+            const qContainer = document.getElementById('fill-questions');
+            qContainer.innerHTML = fillQuestions.map((q, idx) => `
+                <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex flex-wrap items-center gap-2">
+                    <span class="text-gray-600">${idx + 1}. ${q.pre}</span>
+                    <input type="text" readonly 
+                           onclick="placeWord(this)" 
+                           data-answer="${q.answer}" 
+                           class="quiz-input w-32 border-b-2 border-gray-300 bg-gray-50 text-center font-bold text-blue-600 focus:outline-none cursor-pointer h-8" 
+                           placeholder="___">
+                    <span class="text-gray-600">${q.post}</span>
+                    <span class="feedback-icon ml-auto text-xl hidden"></span>
+                </div>
+            `).join('');
+        }
+
+        function selectWord(word, btn) {
+            // Reset previous selection styles
+            document.querySelectorAll('.word-btn').forEach(b => b.classList.remove('bg-blue-600', 'text-white'));
+            
+            selectedWord = word;
+            btn.classList.add('bg-blue-600', 'text-white');
+            btn.classList.remove('bg-gray-100');
+        }
+
+        function placeWord(input) {
+            if (selectedWord) {
+                input.value = selectedWord;
+                input.classList.add('bg-blue-50');
+                selectedWord = null;
+                // Reset buttons
+                document.querySelectorAll('.word-btn').forEach(b => {
+                    b.classList.remove('bg-blue-600', 'text-white');
+                    b.classList.add('bg-gray-100');
+                });
+            }
+        }
+
+        function checkFillAnswers() {
+            let score = 0;
+            const inputs = document.querySelectorAll('.quiz-input');
+            
+            inputs.forEach(input => {
+                const parent = input.parentElement;
+                const feedback = parent.querySelector('.feedback-icon');
+                const userAnswer = input.value.trim();
+                const correctAnswer = input.dataset.answer;
+
+                feedback.classList.remove('hidden');
+                
+                if (userAnswer.toLowerCase() === correctAnswer.toLowerCase()) {
+                    score++;
+                    parent.classList.add('bg-green-50', 'border-green-200');
+                    input.classList.add('text-green-700');
+                    feedback.textContent = '✅';
+                } else {
+                    parent.classList.add('bg-red-50', 'border-red-200');
+                    input.classList.add('text-red-700', 'line-through');
+                    feedback.textContent = `❌ (${correctAnswer})`;
+                    feedback.classList.add('text-red-500', 'text-sm');
+                }
+            });
+
+            document.getElementById('fill-score').textContent = score;
+        }
+
+        // --- MATCHING LOGIC ---
+        function renderMatchingGame() {
+            // Shuffle arrays
+            const sources = [...matchingData].sort(() => Math.random() - 0.5);
+            const targets = [...matchingData].sort(() => Math.random() - 0.5);
+
+            document.getElementById('match-sources').innerHTML = sources.map(item => `
+                <div class="match-item source p-3 bg-white border-2 border-blue-100 rounded-lg cursor-pointer hover:border-blue-400 transition-all" 
+                     onclick="handleMatchClick(this, 'source', ${item.id})">
+                    ${item.idiom}
+                </div>
+            `).join('');
+
+            document.getElementById('match-targets').innerHTML = targets.map(item => `
+                <div class="match-item target p-3 bg-white border-2 border-gray-100 rounded-lg cursor-pointer hover:border-gray-400 transition-all" 
+                     onclick="handleMatchClick(this, 'target', ${item.id})">
+                    ${item.def}
+                </div>
+            `).join('');
+        }
+
+        let matchState = { sourceId: null, sourceEl: null };
+
+        function handleMatchClick(el, type, id) {
+            // If item is already matched (green), ignore
+            if (el.classList.contains('border-green-500')) return;
+
+            if (type === 'source') {
+                // Clear previous selection
+                if (matchState.sourceEl) matchState.sourceEl.classList.remove('bg-blue-600', 'text-white');
+                
+                matchState.sourceId = id;
+                matchState.sourceEl = el;
+                el.classList.add('bg-blue-600', 'text-white');
+            } else if (type === 'target') {
+                if (!matchState.sourceId) return; // No source selected
+
+                if (matchState.sourceId === id) {
+                    // Correct Match
+                    el.classList.remove('border-gray-100');
+                    el.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+                    
+                    matchState.sourceEl.classList.remove('bg-blue-600', 'text-white', 'border-blue-100');
+                    matchState.sourceEl.classList.add('border-green-500', 'bg-green-50', 'text-green-700');
+                    
+                    // Reset
+                    matchState = { sourceId: null, sourceEl: null };
+                    checkMatchWin();
+                } else {
+                    // Wrong Match
+                    el.classList.add('animate-pulse', 'bg-red-100');
+                    setTimeout(() => el.classList.remove('animate-pulse', 'bg-red-100'), 500);
+                }
+            }
+        }
+
+        function checkMatchWin() {
+            const matched = document.querySelectorAll('.border-green-500').length;
+            if (matched === matchingData.length * 2) {
+                const fb = document.getElementById('match-feedback');
+                fb.classList.remove('hidden');
+                fb.classList.add('bg-green-100', 'text-green-800');
+                fb.textContent = "🎉 All matched correctly! Great job!";
+            }
+        }
+
+        // --- VISUAL CHALLENGE LOGIC ---
+        function checkVisual(select, correctValue) {
+            const parent = select.parentElement;
+            const feedback = parent.querySelector('.feedback');
+            
+            if (select.value === correctValue) {
+                feedback.textContent = "Correct! 🎉";
+                feedback.className = "feedback text-sm font-bold text-green-600 mt-2";
+                parent.classList.add('border-2', 'border-green-400');
+            } else if (select.value !== "") {
+                feedback.textContent = "Try again.";
+                feedback.className = "feedback text-sm font-bold text-red-500 mt-2";
+                parent.classList.remove('border-green-400');
+            } else {
+                feedback.textContent = "";
+                parent.classList.remove('border-green-400');
+            }
+        }
+
+    </script>
+</body>
+</html>
